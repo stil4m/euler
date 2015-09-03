@@ -89,8 +89,11 @@ pascal = iterate (\row -> zipWith (+) ([0] ++ row) (row ++ [0])) [1]
 euler15 = head $ drop 20 $ last (take 41 pascal)
 
 -- 32. Pandigital products
+pandigital :: [Char] -> Bool
+pandigital x = sort x == "123456789"
+
 isPandigital :: (Integer, Integer, Integer) -> Bool
-isPandigital (x, y,z) = sort (show x ++ show y ++ show z) == "123456789"
+isPandigital (x, y,z) = pandigital (show x ++ show y ++ show z)
 pandigitalTriples = filter isPandigital [(x,y,z) | x <- [1..1987], y <- [1..(x-1)], let z = x * y ]
 euler32 = sum $ rmdups [ z | (_,_,z) <- pandigitalTriples]
 
@@ -139,6 +142,32 @@ truncs x = map (\q -> read q :: Integer) ((asTruncs $ show x) ++ (asTruncsR $ in
 
 truncablePrimes = take 11 $ filter (\q -> and (map prime $ truncs q) ) $ filter (\q -> (rem q 10) `elem` [3,5,7]) (dropWhile (<10) primes)
 euler37 = sum truncablePrimes
+
+
+--38.
+pandigitalScope :: Integer -> [Integer]
+pandigitalScope 2 = [1000..9999]
+pandigitalScope 3 = [100..333]
+pandigitalScope 4 = [10..33]
+pandigitalScope 5 = [2..19]
+pandigitalScope _ = [1..9]
+
+
+euler38 = last $ sort $ map (\q -> read q :: Integer) pandigitalMultiples
+pandigitalMultiples = filter pandigital items
+    where
+    items = foldr (++) [] $ map concatMultiplication scopeMapping
+    scopeMapping = [ ([1..x], y) | x <- [2..9], let y = pandigitalScope x ]
+    concatMultiplication (x,y) = map (\p -> foldl (++) [] $ map (\q -> show $ p*q) x) y
+
+
+-- 39.
+fracToInt :: RealFrac a => a -> Integer
+fracToInt x = toInteger $ floor x
+
+rightTrianglesPerimeter :: Integer -> [(Integer, Integer, Integer)]
+rightTrianglesPerimeter n = [ (x,y,z) | x <- [1..(div n 2)], y <- [(x+1)..(div (n-x) 2)], let z = n - x - y, x^2 + y^2 == z^2]
+euler39 = head $ reverse $ sort $ map (\q -> (length $ rightTrianglesPerimeter q, q)) [1..1000]
 
 -- 49. Prime permutations
 fourDigitPrimes :: [Integer]
