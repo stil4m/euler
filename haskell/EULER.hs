@@ -169,6 +169,20 @@ rightTrianglesPerimeter :: Integer -> [(Integer, Integer, Integer)]
 rightTrianglesPerimeter n = [ (x,y,z) | x <- [1..(div n 2)], y <- [(x+1)..(div (n-x) 2)], let z = n - x - y, x^2 + y^2 == z^2]
 euler39 = head $ reverse $ sort $ map (\q -> (length $ rightTrianglesPerimeter q, q)) [1..1000]
 
+-- 40.
+champernowneSeq :: [Integer] -> [Char]
+champernowneSeq [] = []
+champernowneSeq (x:xs) = (show x) ++ champernowneSeq xs
+
+findIndexes :: [Integer] -> [a] -> [a]
+findIndexes [] _ = []
+findIndexes (x:xs) ys = head (take 1 $ drop (fromIntegral x) ys) : findIndexes (map (\q -> q-x :: Integer) xs) (drop (fromIntegral x) ys)
+
+euler40 = product $ map digitToInt (findIndexes locations $ champernowneSeq [1..])
+    where
+    locations  = map (\q -> q-1) $ map (10^) [0..6]
+
+
 -- 49. Prime permutations
 fourDigitPrimes :: [Integer]
 fourDigitPrimes = dropWhile (<1000) $ takeWhile (<(10000- 2*3330)) primes
