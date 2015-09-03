@@ -3,6 +3,9 @@ module UTIL
 
 where
 
+import ONeillPrimes (primes)
+import Data.List
+
 ldp :: Integer -> Integer
 ldp n = ldpf primes n
 
@@ -16,9 +19,6 @@ factors :: Integer -> [Integer]
 factors n | n < 1     = error "argument not positive"
           | n == 1    = []
           | otherwise = p : factors (div n p) where p = ldp n
-
-primes :: [Integer]
-primes = 2 : filter prime [3..]
 
 prime :: Integer -> Bool
 prime n | n < 1     = error "not a positive integer"
@@ -40,3 +40,6 @@ run n | n < 1  = error "argument not positive"
 
 factorial :: Integer -> Integer
 factorial n = product [1..n]
+
+rmdups :: (Ord a) => [a] -> [a]
+rmdups = map head . group . sort

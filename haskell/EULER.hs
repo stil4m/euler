@@ -7,6 +7,7 @@ import Data.String
 import Data.Char
 import GHC.Float
 import Data.List
+import ONeillPrimes
 
 -- 1. Multiples of 3 and 5
 euler1 :: Integer
@@ -86,6 +87,14 @@ euler14 = toInteger max_collatz_sequence
 pascal = iterate (\row -> zipWith (+) ([0] ++ row) (row ++ [0])) [1]
 euler15 = head $ drop 20 $ last (take 41 pascal)
 
+-- 32. Pandigital products
+isPandigital :: (Integer, Integer, Integer) -> Bool
+isPandigital (x, y,z) = sort (show x ++ show y ++ show z) == "123456789"
+
+pandigitalTriples = filter isPandigital [(x,y,z) | x <- [1..1987], y <- [1..(x-1)], let z = x * y ]
+
+euler32 = sum $ rmdups [ z | (_,_,z) <- pandigitalTriples]
+
 -- 49. Prime permutations
 fourDigitPrimes :: [Integer]
 fourDigitPrimes = dropWhile (<1000) $ takeWhile (<(10000- 2*3330)) primes
@@ -111,10 +120,11 @@ eulerAll = [(1, euler1), (2, euler2), (3, euler3)
             , (7, euler7)
             , (8, euler8)
             , (9, euler9)
---            , (10, euler10) long running
+            , (10, euler10)
             , (13, euler13)
 --            , (14, euler14) long running
             , (15, euler15)
+            , (32, euler32)
             , (49, euler49)
             ]
 
