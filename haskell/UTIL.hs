@@ -43,3 +43,11 @@ factorial n = product [1..n]
 
 rmdups :: (Ord a) => [a] -> [a]
 rmdups = map head . group . sort
+
+toBin :: Integer -> Integer
+toBin 0 = 0
+toBin n = foldr (\a b -> b * 10 + a) 0 (helper n)
+    where
+    helper 0 = []
+    helper n | n `mod` 2 == 1 = 1 : helper (n `div` 2)
+             | n `mod` 2 == 0 = 0 : helper (n `div` 2)

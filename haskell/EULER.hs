@@ -27,10 +27,10 @@ euler3 :: Integer
 euler3 = last (factors 600851475143)
 
 -- 4. Largest palindrome product
-isPalindrome :: Int -> Bool
+isPalindrome :: Integer -> Bool
 isPalindrome x = (show x) == reverse (show x)
 euler4 :: Integer
-euler4 = toInteger $ maximum [x * y | x <- [100..999], y <- [100..999], isPalindrome (x * y)]
+euler4 = maximum [x * y | x <- [100..999], y <- [100..999], isPalindrome (x * y)]
 
 -- 5. Smallest multiple
 smallestMultiple :: Integer -> [Integer]
@@ -123,7 +123,22 @@ circularPrime x = and $ map prime $ digitRotation x
 euler35 = length $ filter circularPrime $ takeWhile (<1000000) primes
 
 
+-- 36. Double-base palindromes
+euler36 = sum $ filter (\q -> (isPalindrome q) && (isPalindrome $ toBin q)) [1..10^6]
 
+-- 37. Truncatable primes
+truncs :: Integer -> [Integer]
+truncs x = map (\q -> read q :: Integer) ((asTruncs $ show x) ++ (asTruncsR $ init $ show x))
+    where
+    asTruncs :: [Char] -> [[Char]]
+    asTruncs []     = []
+    asTruncs (x:xs) = (x:xs) : asTruncs xs
+    asTruncsR :: [Char] -> [[Char]]
+    asTruncsR [] = []
+    asTruncsR xs = xs : (asTruncsR $ init xs)
+
+truncablePrimes = take 11 $ filter (\q -> and (map prime $ truncs q) ) $ filter (\q -> (rem q 10) `elem` [3,5,7]) (dropWhile (<10) primes)
+euler37 = sum truncablePrimes
 
 -- 49. Prime permutations
 fourDigitPrimes :: [Integer]
