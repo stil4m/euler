@@ -8,6 +8,7 @@ import Data.Char
 import GHC.Float
 import Data.List
 import ONeillPrimes
+import Data.Ratio
 
 -- 1. Multiples of 3 and 5
 euler1 :: Integer
@@ -90,10 +91,39 @@ euler15 = head $ drop 20 $ last (take 41 pascal)
 -- 32. Pandigital products
 isPandigital :: (Integer, Integer, Integer) -> Bool
 isPandigital (x, y,z) = sort (show x ++ show y ++ show z) == "123456789"
-
 pandigitalTriples = filter isPandigital [(x,y,z) | x <- [1..1987], y <- [1..(x-1)], let z = x * y ]
-
 euler32 = sum $ rmdups [ z | (_,_,z) <- pandigitalTriples]
+
+-- 33. Digit cancelling fractions
+fractions = [((div x 10, rem y 10),(x,y)) | x <- [10..89], y <- [(x+1)..99]]
+validFractions = filter (\((a,b), (c,d)) -> ((last $ show c) == (head $ show d)) && a/= 0 && b /= 0) fractions
+matchingFractions = filter (\((a, b),(c,d)) -> (fromInteger a)/(fromInteger b) == (fromInteger c)/(fromInteger d)) validFractions
+euler33 = denominator $ foldr (\(a,b) z -> z * (toRational a) / (toRational b)) 1.0 $ map (\(x,_) -> x) matchingFractions
+
+-- 34. Digit factorials
+naturalList :: Integer -> [Integer]
+naturalList 0 = []
+naturalList x = rem x 10 : (naturalList $ div x 10)
+
+digitFactorial :: Integer -> Integer
+digitFactorial x = sum $ map (\q -> factorial q) $ naturalList x
+
+euler34 = sum $ filter (\q -> q == digitFactorial q) [3..2540160]
+
+
+-- 35. Circular primes
+digitRotation :: Integer -> [Integer]
+digitRotation x = digitRot (length $ show x) $ show x
+    where
+    digitRot :: Int -> [Char] -> [Integer]
+    digitRot l (x:xs) = if l == 0 then [] else (read (x:xs) :: Integer) : digitRot (l-1) (xs ++ [x])
+
+circularPrime x = and $ map prime $ digitRotation x
+
+euler35 = length $ filter circularPrime $ takeWhile (<1000000) primes
+
+
+
 
 -- 49. Prime permutations
 fourDigitPrimes :: [Integer]
@@ -105,6 +135,7 @@ fourDigitPrimeTriplets = filter (\(x, y, z) -> prime y && prime z) $ map (\x -> 
 integerPermutation :: Integer -> Integer -> Bool
 integerPermutation x y = (sort $ show x) == (sort $ show y)
 findPrimePermutationTriplets = filter(\(x, y, z) -> integerPermutation x  y && integerPermutation x z) fourDigitPrimeTriplets
+
 
 euler49 :: Integer
 euler49 = last $ map (\(x, y, z) -> x * 100000000 + y * 10000 + z) findPrimePermutationTriplets
@@ -125,6 +156,7 @@ eulerAll = [(1, euler1), (2, euler2), (3, euler3)
 --            , (14, euler14) long running
             , (15, euler15)
             , (32, euler32)
+            , (33, euler33)
             , (49, euler49)
             ]
 
