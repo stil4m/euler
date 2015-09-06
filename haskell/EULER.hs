@@ -144,7 +144,7 @@ truncablePrimes = take 11 $ filter (\q -> and (map prime $ truncs q) ) $ filter 
 euler37 = sum truncablePrimes
 
 
---38.
+--38. Pandigital multiples
 pandigitalScope :: Integer -> [Integer]
 pandigitalScope 2 = [1000..9999]
 pandigitalScope 3 = [100..333]
@@ -161,7 +161,7 @@ pandigitalMultiples = filter pandigital items
     concatMultiplication (x,y) = map (\p -> foldl (++) [] $ map (\q -> show $ p*q) x) y
 
 
--- 39.
+-- 39. Integer right triangles
 fracToInt :: RealFrac a => a -> Integer
 fracToInt x = toInteger $ floor x
 
@@ -169,7 +169,7 @@ rightTrianglesPerimeter :: Integer -> [(Integer, Integer, Integer)]
 rightTrianglesPerimeter n = [ (x,y,z) | x <- [1..(div n 2)], y <- [(x+1)..(div (n-x) 2)], let z = n - x - y, x^2 + y^2 == z^2]
 euler39 = head $ reverse $ sort $ map (\q -> (length $ rightTrianglesPerimeter q, q)) [1..1000]
 
--- 40.
+-- 40. Champernowne's constant
 champernowneSeq :: [Integer] -> [Char]
 champernowneSeq [] = []
 champernowneSeq (x:xs) = (show x) ++ champernowneSeq xs
@@ -181,6 +181,60 @@ findIndexes (x:xs) ys = head (take 1 $ drop (fromIntegral x) ys) : findIndexes (
 euler40 = product $ map digitToInt (findIndexes locations $ champernowneSeq [1..])
     where
     locations  = map (\q -> q-1) $ map (10^) [0..6]
+
+
+-- 41. Pandigital prime
+panDigitsUpTo :: Int -> [Integer]
+panDigitsUpTo n = map (\q -> read q :: Integer) $ reverse $ sort $ permutations (map intToDigit [1..n])
+euler41 = head $ take 1 $ filter prime $ foldl (++) [] (map panDigitsUpTo $ reverse [1..9])
+
+
+-- 42. Coded triangle numbers
+triangleNumbers :: [Integer]
+triangleNumbers = triangleNumb [1..]
+    where
+    triangleNumb (x:xs) = floor(x*(x+1)/2) : triangleNumb xs
+
+isTriangularNum :: Integer -> Bool
+isTriangularNum x = checkTriangularNum x triangleNumbers where
+    checkTriangularNum :: Integer -> [Integer] -> Bool
+    checkTriangularNum x (y:ys) =  if (x < y) then False else if x == y then True else checkTriangularNum x ys
+
+--stringToNumber :: [Char] -> [Int]
+--stringToNumber
+
+
+-- 44. Pentagon numbers
+toPentagon :: Integer -> Integer
+toPentagon x =  (div (x * (3 * x - 1)) 2)
+
+pentagons :: [Integer]
+pentagons = _pentagons [1..]
+    where
+    _pentagons :: [Integer] -> [Integer]
+    _pentagons (x:xs) = toPentagon x : _pentagons xs
+
+euler44 = undefined
+
+
+-- 45. Triangular, pentagonal, and hexagonal
+toTriangular :: Integer -> Integer
+toTriangular x = (div (x * (x + 1)) 2)
+
+toHexagonal :: Integer -> Integer
+toHexagonal x = x * (2 * x - 1)
+
+specialTPHTriplet :: (Integer, Integer, Integer) -> [(Integer, Integer, Integer)]
+specialTPHTriplet (t, p, h) | (toTriangular t) == (toPentagon p) && (toPentagon p) == (toHexagonal h) = (t, p, h) : specialTPHTriplet (t+1, p+1, h+1)
+                            | (toTriangular t) < (toPentagon p) = specialTPHTriplet (t+1,p,h)
+                            | (toTriangular t) > (toPentagon p) = specialTPHTriplet (t,p+1,h)
+                            | (toTriangular t) < (toHexagonal h) = specialTPHTriplet (t+1,p,h)
+                            | (toTriangular t) > (toHexagonal h) = specialTPHTriplet (t,p,h+1)
+                            | (toPentagon p) < (toHexagonal h) = specialTPHTriplet (t,p+1,h)
+                            | otherwise = specialTPHTriplet (t,p,h +1)
+
+euler45 = head $ map (\(x,_,_) -> toTriangular x) $ specialTPHTriplet (286,166,144)
+
 
 
 -- 49. Prime permutations
