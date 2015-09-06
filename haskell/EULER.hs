@@ -236,6 +236,14 @@ specialTPHTriplet (t, p, h) | (toTriangular t) == (toPentagon p) && (toPentagon 
 euler45 = head $ map (\(x,_,_) -> toTriangular x) $ specialTPHTriplet (286,166,144)
 
 
+-- 46. Goldbach's other conjecture
+oddComposites :: [Integer]
+oddComposites = drop 1 $ filter (not .prime) $ filter odd [1..]
+
+isGoldbach :: Integer -> Bool
+isGoldbach x = (length $ filter isSquare $ map (\q -> div (x-q) 2) $ takeWhile (<x) $ drop 1 primes) > 0
+
+euler46 = head $ filter (not . isGoldbach) oddComposites
 
 -- 49. Prime permutations
 fourDigitPrimes :: [Integer]

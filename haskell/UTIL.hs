@@ -51,3 +51,9 @@ toBin n = foldr (\a b -> b * 10 + a) 0 (helper n)
     helper 0 = []
     helper n | n `mod` 2 == 1 = 1 : helper (n `div` 2)
              | n `mod` 2 == 0 = 0 : helper (n `div` 2)
+
+
+isSquare :: Integer -> Bool
+isSquare x = (root * root) == x where
+    root ::  Integer
+    root = toInteger $ floor $ sqrt $ fromInteger x
