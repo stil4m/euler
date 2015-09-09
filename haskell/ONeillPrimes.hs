@@ -25,10 +25,6 @@ data PriorityQ k v = Lf
 emptyPQ :: PriorityQ k v
 emptyPQ = Lf
 
-isEmptyPQ :: PriorityQ k v -> Bool
-isEmptyPQ Lf  = True
-isEmptyPQ _   = False
-
 minKeyValuePQ :: PriorityQ k v -> (k, v)
 minKeyValuePQ (Br k v _ _)    = (k,v)
 minKeyValuePQ _               = error "Empty heap!"
@@ -36,10 +32,6 @@ minKeyValuePQ _               = error "Empty heap!"
 minKeyPQ :: PriorityQ k v -> k
 minKeyPQ (Br k v _ _)         = k
 minKeyPQ _                    = error "Empty heap!"
-
-minValuePQ :: PriorityQ k v -> v
-minValuePQ (Br k v _ _)       = v
-minValuePQ _                  = error "Empty heap!"
 
 insertPQ :: Ord k => k -> v -> PriorityQ k v -> PriorityQ k v
 insertPQ wk wv (Br vk vv t1 t2)
@@ -49,13 +41,13 @@ insertPQ wk wv Lf             = Br wk wv Lf Lf
 
 siftdown :: Ord k => k -> v -> PriorityQ k v -> PriorityQ k v -> PriorityQ k v
 siftdown wk wv Lf _             = Br wk wv Lf Lf
-siftdown wk wv (t @ (Br vk vv _ _)) Lf 
+siftdown wk wv (t @ (Br vk vv _ _)) Lf
     | wk <= vk                  = Br wk wv t Lf
     | otherwise                 = Br vk vv (Br wk wv Lf Lf) Lf
 siftdown wk wv (t1 @ (Br vk1 vv1 p1 q1)) (t2 @ (Br vk2 vv2 p2 q2))
     | wk <= vk1 && wk <= vk2    = Br wk wv t1 t2
     | vk1 <= vk2                = Br vk1 vv1 (siftdown wk wv p1 q1) t2
-    | otherwise                 = Br vk2 vv2 t1 (siftdown wk wv p2 q2) 
+    | otherwise                 = Br vk2 vv2 t1 (siftdown wk wv p2 q2)
 
 deleteMinAndInsertPQ :: Ord k => k -> v -> PriorityQ k v -> PriorityQ k v
 deleteMinAndInsertPQ wk wv Lf             = error "Empty PriorityQ"
@@ -67,14 +59,8 @@ leftrem (Br vk vv t1 t2) = (wk, wv, Br vk vv t2 t) where
     (wk, wv, t) = leftrem t1
 leftrem _                = error "Empty heap!"
 
-deleteMinPQ :: Ord k => PriorityQ k v -> PriorityQ k v
-deleteMinPQ (Br vk vv Lf _) = Lf
-deleteMinPQ (Br vk vv t1 t2) = siftdown wk wv t2 t where
-    (wk,wv,t) = leftrem t1
-deleteMinPQ _ = error "Empty heap!"
-
 -- A hybrid of Priority Queues and regular queues.  It allows a priority
--- queue to have a feeder queue, filled with items that come in an 
+-- queue to have a feeder queue, filled with items that come in an
 -- increasing order.  By keeping the feed for the queue separate, we
 -- avoid needlessly filling an O(log n) data structure with data that
 -- it won't need for a long time.
@@ -90,7 +76,7 @@ insertHQ k v (pq, q) = (insertPQ k v pq, q)
 deleteMinAndInsertHQ :: (Ord k) => k -> v -> HybridQ k v -> HybridQ k v
 deleteMinAndInsertHQ k v (pq, q) = postRemoveHQ(deleteMinAndInsertPQ k v pq, q)
     where
-        postRemoveHQ mq@(pq, []) = mq 
+        postRemoveHQ mq@(pq, []) = mq
         postRemoveHQ mq@(pq, (qk,qv) : qs)
             | qk < minKeyPQ pq = (insertPQ qk qv pq, qs)
             | otherwise        = mq
@@ -145,15 +131,15 @@ primesToLimit limit = takeWhile (< limit) (calcPrimes ())
 -- This version of the sieve takes a wheel, not a list to be sieved.
 -- primes1 and primes2 represent the same infinite list of, but they are
 -- consumed at different speeds.  By creating separate expressions, we
--- avoid retaining all the material between the two points.  Sometimes 
+-- avoid retaining all the material between the two points.  Sometimes
 -- (when you care about space usage) memoization is not your friend.
 
 {-# SPECIALIZE sieve :: Int -> [Int] -> [Int] #-}
 {-# SPECIALIZE sieve :: Integer -> [Integer] -> [Integer] #-}
 sieve :: Integral a => a -> [a] -> [a]
-sieve n [] = []
+sieve _ [] = []
 sieve n wheel@(d:ds) = n : (map (\(p,wheel) -> p) primes1) where
-    primes1 = sieve' (n+d) ds initialTable 
+    primes1 = sieve' (n+d) ds initialTable
     primes2 = sieve' (n+d) ds initialTable
     initialTable = initHQ (insertPQ (n*n) (n, wheel) emptyPQ)
                    (map (\(p,wheel) -> (p*p,(p,wheel))) primes2)
@@ -169,4 +155,3 @@ sieve n wheel@(d:ds) = n : (map (\(p,wheel) -> p) primes1) where
               where
 		(m, (p, d:ds)) = minKeyValueHQ table
 		m' = m + p * d
-
