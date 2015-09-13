@@ -3,7 +3,6 @@ module EULER where
 import UTIL
 import INPUT
 import Data.Char
-import GHC.Float
 import Data.List
 import ONeillPrimes
 import Data.Ratio
@@ -285,6 +284,11 @@ isGoldbach x = any isSquare $ map (\q -> div (x-q) 2) $ takeWhile (<x) $ drop 1 
 euler46 :: Integer
 euler46 = head $ filter (not . isGoldbach) oddComposites
 
+
+-- 48. Self powers
+euler48 :: Integer
+euler48 = read (reverse $ take 10 $ reverse $ show (sum $ map (\x -> x^x) [1..1000])) :: Integer
+
 -- 49. Prime permutations
 fourDigitPrimes :: [Integer]
 fourDigitPrimes = dropWhile (<1000) $ takeWhile (<(10000- 2*3330)) primes
@@ -297,7 +301,6 @@ integerPermutation x y = sort (show x) == sort (show y)
 
 findPrimePermutationTriplets :: [(Integer, Integer, Integer)]
 findPrimePermutationTriplets = filter(\(x, y, z) -> integerPermutation x  y && integerPermutation x z) fourDigitPrimeTriplets
-
 
 euler49 :: Integer
 euler49 = last $ map (\(x, y, z) -> x * 100000000 + y * 10000 + z) findPrimePermutationTriplets

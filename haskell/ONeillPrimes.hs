@@ -30,7 +30,7 @@ minKeyValuePQ (Br k v _ _)    = (k,v)
 minKeyValuePQ _               = error "Empty heap!"
 
 minKeyPQ :: PriorityQ k v -> k
-minKeyPQ (Br k v _ _)         = k
+minKeyPQ (Br k _ _ _)         = k
 minKeyPQ _                    = error "Empty heap!"
 
 insertPQ :: Ord k => k -> v -> PriorityQ k v -> PriorityQ k v
@@ -50,7 +50,7 @@ siftdown wk wv (t1 @ (Br vk1 vv1 p1 q1)) (t2 @ (Br vk2 vv2 p2 q2))
     | otherwise                 = Br vk2 vv2 t1 (siftdown wk wv p2 q2)
 
 deleteMinAndInsertPQ :: Ord k => k -> v -> PriorityQ k v -> PriorityQ k v
-deleteMinAndInsertPQ wk wv Lf             = error "Empty PriorityQ"
+deleteMinAndInsertPQ _  _  Lf             = error "Empty PriorityQ"
 deleteMinAndInsertPQ wk wv (Br _ _ t1 t2) = siftdown wk wv t1 t2
 
 leftrem :: PriorityQ k v -> (k, v, PriorityQ k v)
