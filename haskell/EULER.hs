@@ -6,6 +6,7 @@ import Data.Char
 import Data.List
 import ONeillPrimes
 import Data.Ratio
+import Data.String
 
 -- 1. Multiples of 3 and 5
 euler1 :: Integer
@@ -305,22 +306,30 @@ findPrimePermutationTriplets = filter(\(x, y, z) -> integerPermutation x  y && i
 euler49 :: Integer
 euler49 = last $ map (\(x, y, z) -> x * 100000000 + y * 10000 + z) findPrimePermutationTriplets
 
+-- 67. Maximum path sum II
+pyramidToIntegers :: String -> [[Integer]]
+pyramidToIntegers s = map (map (\p -> read p :: Integer) . words) (lines s)
 
--- divisors :: Integer -> [Integer]
--- divisors n = 1 : (n : concat (map (\q -> [q, div n q]) (fac ++ [(x*y) | x <- fac, y <- fac, x <= y, x * y <= limit, rem n (x*y) == 0] ) ))
-  -- where
-  -- limit = (floor.sqrt.fromIntegral) n
-  -- fac = (nub $ factors n)
+foldRows :: [Integer] -> [Integer] -> [Integer]
+foldRows (a:b:xs) (y:z:zs) = y + max a b : foldRows (b:xs) (z:zs)
+foldRows [x] (y:_) = [y+x]
+foldRows _ y = y
 
+foldPyramid :: [[Integer]] -> [Integer]
+foldPyramid [] = error "Invalid input"
+foldPyramid [x] = x
+foldPyramid (x:y:ys) = foldPyramid (foldRows (0:x) y : ys)
 
-divisors' n = (1:) $ nub $ concat [ [x, div n x] | x <- [2..limit], rem n x == 0 ] ++ [n  ]
-     where limit = (floor.sqrt.fromIntegral) n
+computeMaxPath :: String -> Integer
+computeMaxPath s = maximum $ foldPyramid (pyramidToIntegers s)
 
--- some = filter (\q -> divisors' q /= divisors q) [10..100]
+euler67 :: IO ()
+euler67 = do
+       content <- readFile "p067_triangle.txt"
+       let linesOfFile = computeMaxPath content
+       print linesOfFile
 
--- some n = map (\(x,y,z) -> (y, x^2 - y^2 - z^2)) $ some2 n
--- some2 n = map ((\(p,q) -> (p+q, p, p-q)) . (\q -> (q, div (div n q + q) 4))) $ euler135 n
-
+-- 135. Same differences
 euler135 :: Integer
 euler135 =  toInteger $ length (filter (== 10) $ map (length . primeCenterCandidates) ( filter (not.prime) [1100..10^6]))
 
