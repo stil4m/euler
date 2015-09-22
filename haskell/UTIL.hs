@@ -3,6 +3,7 @@ module UTIL
 
 where
 
+import Data.Char
 import ONeillPrimes (primes)
 import Data.List
 
@@ -57,3 +58,12 @@ isSquare :: Integer -> Bool
 isSquare x = (root * root) == x where
     root ::  Integer
     root = toInteger $ floor $ sqrt $ fromInteger x
+
+combinatorics :: Integer -> Integer -> Integer
+combinatorics n r = div (factorial n) (factorial r * factorial (n - r))
+
+while :: (a -> Bool) -> (a -> a) -> a -> a
+while = until . (not.)
+
+whiler :: (a -> Bool) -> (a -> a) -> (a -> b) -> a -> b
+whiler p f r = r . while p f

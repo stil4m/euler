@@ -306,6 +306,42 @@ findPrimePermutationTriplets = filter(\(x, y, z) -> integerPermutation x  y && i
 euler49 :: Integer
 euler49 = last $ map (\(x, y, z) -> x * 100000000 + y * 10000 + z) findPrimePermutationTriplets
 
+-- 50. Consecutive prime sum
+euler50 = euler50' 1000000 (0,0,primes) where
+  euler50' n = whiler
+    (\ (x, _, ps) -> head ps * x < n)
+    (euler50exec n)
+    (\ (x, y, _) -> (x,y))
+  euler50exec n (x, y, ps) = if x < fst result then (fst result, snd result, tail ps) else (x, y, tail ps)
+    where result = consecutivePrimes (<n) ps
+
+consecutivePrimes :: (Integer -> Bool) -> [Integer] -> (Integer, Integer)
+consecutivePrimes prop xs = (toInteger $ length result, head result) where
+  result = dropWhile (\q -> (not.prime) q || (not.prop) q) (consecutive prop ([],xs))
+
+consecutive prop = whiler
+          (\ (xs,ps) -> null xs || ((not.null) ps && prop (head xs) && prop (head ps)))
+          (\ (xs,ps) -> if null xs then ([head ps], tail ps) else ((head ps + head xs) : xs, tail ps))
+          fst
+
+--52. Permuted multiples
+euler52 :: Integer
+euler52 = head $ head $ filter arePermutations $ map euler52multiples [1..]
+
+arePermutations :: [Integer] -> Bool
+arePermutations x = foldl (\b a -> b && head ss == a) True (tail ss) where
+  ss = map (sort.show) x
+
+euler52multiples x = map (*x) [1..6]
+
+-- 53. Combinatoric selections
+euler53 :: Int
+euler53 = length $ filter (>1000000) [ combinatorics n r | n <- [1..100], r <- [0..n] ]
+
+-- 56. Powerful digit sum
+euler56 :: Int
+euler56 = maximum [sum (map digitToInt (show (x^y))) | x <- [1..100], y <- [1..100]]
+
 -- 67. Maximum path sum II
 pyramidToIntegers :: String -> [[Integer]]
 pyramidToIntegers s = map (map (\p -> read p :: Integer) . words) (lines s)
