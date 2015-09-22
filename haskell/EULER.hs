@@ -365,6 +365,12 @@ euler67 = do
        let linesOfFile = computeMaxPath content
        print linesOfFile
 
+-- 119. Digit power sum
+
+euler119 = (dropWhile (<=10) $ sort $ map snd $ concatMap factorValues [1..1000]) !! 29
+factorValues :: Integer -> [(Integer, Integer)]
+factorValues n = filter (\(p,_) -> p == n) $ map ((\q -> (digitSum q, q)) . (n^)) [1..100]
+
 -- 135. Same differences
 euler135 :: Integer
 euler135 =  toInteger $ length (filter (== 10) $ map (length . primeCenterCandidates) ( filter (not.prime) [1100..10^6]))

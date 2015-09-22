@@ -67,3 +67,7 @@ while = until . (not.)
 
 whiler :: (a -> Bool) -> (a -> a) -> (a -> b) -> a -> b
 whiler p f r = r . while p f
+
+
+digitSum :: Integer -> Integer
+digitSum n = toInteger $ sum $ map digitToInt (show n) 
