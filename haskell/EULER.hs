@@ -109,7 +109,6 @@ numberDecimals m = drop (length (factors m)) $ numbers' (start m) m where
   numbers' n x | mod n x == 0 = [div n x]
                | otherwise = div n x : numbers' ((n - x * div n x) * 10) x
 
-
 cycleLength :: [Integer] -> Int
 cycleLength = cycleLength' [] where
   cycleLength' :: [Integer] -> [Integer] -> Int
@@ -117,6 +116,19 @@ cycleLength = cycleLength' [] where
   cycleLength' [] (y:ys) = cycleLength' [y] ys
   cycleLength' xs ys = if xs == take (length xs) ys then length xs else cycleLength' (xs ++ [head ys]) (tail ys)
 
+-- 27. Quadratic primes
+
+euler27 :: Integer
+euler27 = uncurry (*) (snd $ maximum $ map (\q -> (longestPrimeSequence q, q)) [(a, b) | a <- quadraticPrimes, b <- quadraticPrimes])
+
+longestPrimeSequence :: (Integer,Integer) -> Integer
+longestPrimeSequence (x,y) = longestPrimeSequence' 1 x y where
+  longestPrimeSequence' n a b = if value > 0 && prime value then longestPrimeSequence' (n+1) a b else n where
+    value = n^2 + (n*a) + b
+
+quadraticPrimes :: [Integer]
+quadraticPrimes = lowPrimes ++ map (*(-1)) lowPrimes where
+  lowPrimes = takeWhile (<1000) primes
 
 -- 32. Pandigital products
 pandigital :: String -> Bool
