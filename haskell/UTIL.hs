@@ -72,5 +72,11 @@ whiler p f r = r . while p f
 digitSum :: Integer -> Integer
 digitSum n = toInteger $ sum $ map digitToInt (show n)
 
+isPalindrome :: Integer -> Bool
+isPalindrome x = show x == reverse (show x)
+
 wordToSum :: String -> Int
 wordToSum = foldl (\b a -> b + (ord (toLower a) - 96)) 0
+
+divides :: Integral a => a -> a -> Bool
+divides m n = mod m n == 0
