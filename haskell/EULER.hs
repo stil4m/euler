@@ -99,6 +99,25 @@ pascal = iterate (\row -> zipWith (+) (0 : row) (row ++ [0])) [1]
 euler15 :: Integer
 euler15 = last (take 41 pascal) !! 20
 
+-- 26. Reciprocal cycles
+euler26 :: Integer
+euler26 = snd $ head $reverse $ sort $ map (\q -> (cycleLength (numberDecimals q), q)) (takeWhile (<1000) primes)
+
+numberDecimals :: Integer -> [Integer]
+numberDecimals m = drop (length (factors m)) $ numbers' (start m) m where
+  start x = head $ dropWhile (<x) $ map (10^) [1..]
+  numbers' n x | mod n x == 0 = [div n x]
+               | otherwise = div n x : numbers' ((n - x * div n x) * 10) x
+
+
+cycleLength :: [Integer] -> Int
+cycleLength = cycleLength' [] where
+  cycleLength' :: [Integer] -> [Integer] -> Int
+  cycleLength' _ [] = 0
+  cycleLength' [] (y:ys) = cycleLength' [y] ys
+  cycleLength' xs ys = if xs == take (length xs) ys then length xs else cycleLength' (xs ++ [head ys]) (tail ys)
+
+
 -- 32. Pandigital products
 pandigital :: String -> Bool
 pandigital x = sort x == "123456789"
@@ -366,10 +385,17 @@ euler67 = do
        print linesOfFile
 
 -- 119. Digit power sum
-
-euler119 = (dropWhile (<=10) $ sort $ map snd $ concatMap factorValues [1..1000]) !! 29
+euler119 :: Integer
+euler119 = dropWhile (<=10) (sort $ map snd $ concatMap factorValues [1..1000]) !! 29
 factorValues :: Integer -> [(Integer, Integer)]
 factorValues n = filter (\(p,_) -> p == n) $ map ((\q -> (digitSum q, q)) . (n^)) [1..100]
+
+-- 120. Square remainders
+euler120 :: Integer
+euler120 = sum (map squareRem [3..1000])
+
+squareRem :: Integer -> Integer
+squareRem n = if odd n then n * (n-1) else n * (n-2)
 
 -- 135. Same differences
 euler135 :: Integer
