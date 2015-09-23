@@ -8,7 +8,7 @@ import ONeillPrimes (primes)
 import Data.List
 
 ldp :: Integer -> Integer
-ldp n = ldpf primes n
+ldp = ldpf primes
 
 ldpf :: [Integer] -> Integer -> Integer
 ldpf [] _     = 0
@@ -70,4 +70,7 @@ whiler p f r = r . while p f
 
 
 digitSum :: Integer -> Integer
-digitSum n = toInteger $ sum $ map digitToInt (show n) 
+digitSum n = toInteger $ sum $ map digitToInt (show n)
+
+wordToSum :: String -> Int
+wordToSum = foldl (\b a -> b + (ord (toLower a) - 96)) 0

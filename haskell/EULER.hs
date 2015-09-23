@@ -7,6 +7,7 @@ import Data.List
 import ONeillPrimes
 import Data.Ratio
 import Data.String
+import Data.List.Split
 
 -- 1. Multiples of 3 and 5
 euler1 :: Integer
@@ -258,22 +259,24 @@ euler41 = head $ take 1 $ filter prime $ concatMap panDigitsUpTo $ reverse [1..9
 
 
 -- 42. Coded triangle numbers
-triangleNumbers :: [Integer]
+-- cabal install split
+euler42 :: IO ()
+euler42 = do
+  s <- readFile "p042_words.txt"
+  let t = length $ filter isTriangularNum $ map (wordToSum) (euler42fileWords s) where
+  print t
+
+euler42fileWords :: String -> [String]
+euler42fileWords s = map (tail.init) (splitOn "," s)
+
+triangleNumbers :: [Int]
 triangleNumbers = triangleNumb [1..]
     where
     triangleNumb (x:xs) = floor(x*(x+1)/2) : triangleNumb xs
 
-isTriangularNum :: Integer -> Bool
-isTriangularNum n = checkTriangularNum n triangleNumbers where
-    checkTriangularNum :: Integer -> [Integer] -> Bool
-    checkTriangularNum _ []  = False
-    checkTriangularNum x (y:ys) | x < y = False
-                                | x == y = True
-                                | otherwise = checkTriangularNum x ys
-
---stringToNumber :: [Char] -> [Int]
---stringToNumber
-
+isTriangularNum :: Int -> Bool
+isTriangularNum n = firstMatch == n where
+    firstMatch = head $ dropWhile (<n) triangleNumbers
 
 -- 44. Pentagon numbers
 toPentagon :: Integer -> Integer
