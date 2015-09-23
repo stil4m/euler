@@ -97,6 +97,16 @@ isGoldbach x = any isSquare $ map (\q -> div (x-q) 2) $ takeWhile (<x) $ drop 1 
 euler46 :: Integer
 euler46 = head $ filter (not . isGoldbach) oddComposites
 
+-- 47. Distinct primes factors
+euler47 :: Integer
+euler47 = euler47sol (5, factors 2, factors 3, factors 4)
+
+euler47sol :: (Integer,[Integer],[Integer],[Integer]) -> Integer
+euler47sol (n, x, y, z) = if result then (n - 3) else euler47sol (n+1, y, z, factors n) where
+  result = all (not.prime) [n-2..n] && all (\b -> length (nub b) == 4) [x, y, z, baz]
+    where
+      baz :: [Integer]
+      baz = factors n
 
 -- 48. Self powers
 euler48 :: Integer
