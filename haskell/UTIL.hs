@@ -80,3 +80,6 @@ wordToSum = foldl (\b a -> b + (ord (toLower a) - 96)) 0
 
 divides :: Integral a => a -> a -> Bool
 divides m n = mod m n == 0
+
+toPentagon :: Integer -> Integer
+toPentagon x =  div (x * (3 * x - 1)) 2

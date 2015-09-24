@@ -55,16 +55,14 @@ filterWithDivisor n xs ys = map (\x -> (x: init xs, last xs : ys)) candidates wh
 intListToSingle :: [Integer] -> Integer
 intListToSingle = foldl (\b a -> b * 10 + a) 0
 
+
 -- 44. Pentagon numbers
 euler44 :: Integer
-euler44 = undefined
+euler44 = head $ map (\(p,q) -> p-q ) $take 1 [ (z,a) | x <- [1..], let z = toPentagon x, y <-[1..x], let a = toPentagon y, isPentagon (z - a), isPentagon (z+a) ]
 
-toPentagon :: Integer -> Integer
-toPentagon x =  div (x * (3 * x - 1)) 2
-
-pentagons :: [Integer]
-pentagons = map toPentagon [1..]
-
+isPentagon :: Integer -> Bool
+isPentagon n = isInt ((sqrt(24 * fromInteger n + 1) + 1) / 6)
+isInt x = x == fromInteger (round x)
 
 
 -- 45. Triangular, pentagonal, and hexagonal
@@ -107,6 +105,7 @@ euler47sol (n, x, y, z) = if result then (n - 3) else euler47sol (n+1, y, z, fac
     where
       baz :: [Integer]
       baz = factors n
+
 
 -- 48. Self powers
 euler48 :: Integer
