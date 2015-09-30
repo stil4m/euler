@@ -13,6 +13,3 @@ primeCenterCandidates n = [x | x <- myDivs n, let y = div n x, rem (x + y) 4 == 
 myDivs :: Integer -> [Integer]
 myDivs n = nub $ concat [ [x,y] | x <- [1..limit], rem n x == 0, let y = div n x] where
     limit = (floor.sqrt.fromIntegral) n
-
-divisors :: Integer -> [Integer]
-divisors n = [x | x <- [1..(n-1)], n `rem` x == 0]

@@ -66,9 +66,6 @@ isInt x = x == fromInteger (round x)
 
 
 -- 45. Triangular, pentagonal, and hexagonal
-toTriangular :: Integer -> Integer
-toTriangular x = div (x * (x + 1)) 2
-
 toHexagonal :: Integer -> Integer
 toHexagonal x = x * (2 * x - 1)
 

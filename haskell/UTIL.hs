@@ -3,6 +3,7 @@ module UTIL
 
 where
 
+import ONeillPrimes
 import Data.Char
 import ONeillPrimes (primes)
 import Data.List
@@ -83,3 +84,48 @@ divides m n = mod m n == 0
 
 toPentagon :: Integer -> Integer
 toPentagon x =  div (x * (3 * x - 1)) 2
+
+toTriangular :: Integer -> Integer
+toTriangular x = div (x * (x + 1)) 2
+
+divisors :: Integer -> [Integer]
+divisors n = (1:) $ nub $ concat [ [x, div n x] | x <- [2..limit], rem n x == 0 ]
+     where limit = (floor.sqrt.fromIntegral) n
+
+
+numDivisors :: Integer -> Integer
+numDivisors n = toInteger $ product (map ((+1).length) $ group $ factors n) - 1
+
+-- Path Sum Pyramide
+pyramidToIntegers :: String -> [[Integer]]
+pyramidToIntegers s = map (map (\p -> read p :: Integer) . words) (lines s)
+
+foldRows :: [Integer] -> [Integer] -> [Integer]
+foldRows (a:b:xs) (y:z:zs) = y + max a b : foldRows (b:xs) (z:zs)
+foldRows [x] (y:_) = [y+x]
+foldRows _ y = y
+
+foldPyramid :: [[Integer]] -> [Integer]
+foldPyramid [] = error "Invalid input"
+foldPyramid [x] = x
+foldPyramid (x:y:ys) = foldPyramid (foldRows (0:x) y : ys)
+
+computeMaxPath :: String -> Integer
+computeMaxPath s = maximum $ foldPyramid (pyramidToIntegers s)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--
