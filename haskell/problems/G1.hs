@@ -59,7 +59,7 @@ euler8 = toInteger $ maximum (longestStreak 13 (map digitToInt euler8input) )
 -- 9. Special Pythagorean triplet
 euler9 :: Integer
 euler9 = product [a, b, c]
-    where (a, b, c) = head [(x, y, z) | x <- [1..333], y <- [a..500], let z = 1000 - x - y, a^2 + b^2 == c^2 ]
+    where (a, b, c) = head [(x, y, z) | x <- [1..333], y <- [x..500], let z = 1000 - x - y, x^2 + y^2 == z^2 ]
 
 -- 10. Summation of primes
 euler10 :: Integer
