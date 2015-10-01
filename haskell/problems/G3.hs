@@ -5,6 +5,10 @@ import Data.List
 import UTIL
 import ONeillPrimes
 
+-- 21.
+euler21 = sum $ map fst [ (x,y) |  (x,y) <- amicablePairs, x /=  y && y < 10001, let z = amicablePairs !! (fromInteger y), snd z == x] where
+  amicablePairs = map (\q -> (q, sum $ divisors q)) [0..10000]
+
 -- 26. Reciprocal cycles
 euler26 :: Integer
 euler26 = snd $ head $reverse $ sort $ map (\q -> (cycleLength (numberDecimals q), q)) (takeWhile (<1000) primes)
