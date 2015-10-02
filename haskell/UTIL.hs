@@ -3,10 +3,10 @@ module UTIL
 
 where
 
-import ONeillPrimes
 import Data.Char
 import ONeillPrimes (primes)
 import Data.List
+import Data.List.Split
 
 ldp :: Integer -> Integer
 ldp = ldpf primes
@@ -113,10 +113,8 @@ foldPyramid (x:y:ys) = foldPyramid (foldRows (0:x) y : ys)
 computeMaxPath :: String -> Integer
 computeMaxPath s = maximum $ foldPyramid (pyramidToIntegers s)
 
-
-
-
-
+commaSepToStringList :: String -> [String]
+commaSepToStringList s = map (tail.init) (splitOn "," s)
 
 
 

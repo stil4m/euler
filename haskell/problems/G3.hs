@@ -5,9 +5,21 @@ import Data.List
 import UTIL
 import ONeillPrimes
 
--- 21.
-euler21 = sum $ map fst [ (x,y) |  (x,y) <- amicablePairs, x /=  y && y < 10001, let z = amicablePairs !! (fromInteger y), snd z == x] where
+-- 21. Amicable numbers
+euler21 = sum $ map fst [ (x,y) |  (x,y) <- amicablePairs, x /=  y && y < 10001, let z = amicablePairs !! fromInteger y, snd z == x] where
   amicablePairs = map (\q -> (q, sum $ divisors q)) [0..10000]
+
+
+-- 22. Names scores
+euler22 :: IO ()
+euler22 = do
+  s <- readFile "p022_names.txt"
+  -- print (commaSepToStringList (init s))
+  print (sum $ nameScores 1 (sort $ commaSepToStringList (init s)))
+
+nameScores :: Int -> [String] -> [Int]
+nameScores _ [] = []
+nameScores n (x:xs) = (n * wordToSum x) : nameScores (n+1) xs
 
 -- 26. Reciprocal cycles
 euler26 :: Integer

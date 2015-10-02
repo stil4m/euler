@@ -20,11 +20,9 @@ euler41 = head $ take 1 $ filter prime $ concatMap panDigitsUpTo $ reverse [1..9
 euler42 :: IO ()
 euler42 = do
   s <- readFile "p042_words.txt"
-  let t = length $ filter isTriangularNum $ map (wordToSum) (euler42fileWords s) where
+  let t = length $ filter isTriangularNum $ map (wordToSum) (commaSepToStringList s) where
   print t
 
-euler42fileWords :: String -> [String]
-euler42fileWords s = map (tail.init) (splitOn "," s)
 
 triangleNumbers :: [Int]
 triangleNumbers = triangleNumb [1..]
