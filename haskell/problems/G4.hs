@@ -6,6 +6,42 @@ import UTIL
 import ONeillPrimes
 import Data.Ratio
 import Data.Char
+
+-- 31. Coin sums
+euler31 :: Int
+euler31 = length (partCoins 200)
+
+-- Code for exercise 5.126 in the book Haskell Road to Logic
+type Part = [Int]
+type CmprPart = (Int,Part)
+coins :: [Int]
+coins = [200, 100, 50, 20, 10, 5, 2, 1]
+
+expand :: CmprPart -> Part
+expand (0,p) = p
+expand (n,p) = 1 : expand (n-1, p)
+
+nextCoinPartition :: CmprPart -> CmprPart
+nextCoinPartition (k,x:xs) = packCoins (x - 1) (k+x,xs)
+
+packCoins :: Int -> CmprPart -> CmprPart
+packCoins 1 (m,xs) = (m,xs)
+packCoins k (m,xs) = if k <= m && elem k coins then packCoins k (m-k,k:xs)
+                     else packCoins (k - 1) (m, xs)
+
+
+generateCoinPs :: CmprPart -> [Part]
+generateCoinPs p@(_,[]) = [expand p]
+generateCoinPs p = expand p : generateCoinPs (nextCoinPartition p)
+
+partCoins :: Int -> [Part]
+partCoins n | n < 1 = error "partCoins: argument <= 0"
+       | n == 1 = [[]]
+       | otherwise = generateCoinPs (packCoins m (n-m, [m]))
+    where
+    m = maximum $ filter (<=n) coins
+
+
 -- 32. Pandigital products
 pandigital :: String -> Bool
 pandigital x = sort x == "123456789"
