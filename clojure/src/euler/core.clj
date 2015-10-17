@@ -28,14 +28,18 @@
 (def euler7
   (last (take 10001 (primes/lazy-primes))))
 
-(defn parts-of
-  [n seq]
-  (if (< (count seq) n)
-    []
-    (cons (take n seq) (parts-of n (drop 1 seq)))))
-
 (def euler8
-  (apply max (map #(apply * %) (parts-of 13 input/input8))))
+  (apply max (map #(apply * %) (util/parts-of 13 input/input8))))
+
+(def euler9
+  (apply * (flatten (for
+                      [x (range 1 333)]
+                      (for
+                        [y (range (inc x) 500)
+                         :let [z (- 1000 y x)]
+                         :when (> z y)
+                         :when (= (+ (Math/pow x 2) (Math/pow y 2)) (Math/pow z 2))]
+                        [x y z])))))
 
 (defn -main
   "I don't do a whole lot ... yet."

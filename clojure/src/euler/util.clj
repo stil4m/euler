@@ -58,3 +58,10 @@
 (defn least-factor-map
   [n m]
   (reduce (fn [b a] (merge-with max (factors-map a) b)) {} (range n (inc m))))
+
+(defn parts-of
+  "Divides a sequence in lists with length `n`"
+  [n seq]
+  (if (< (count seq) n)
+    []
+    (cons (take n seq) (parts-of n (drop 1 seq)))))
