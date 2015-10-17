@@ -41,6 +41,9 @@
                          :when (= (+ (Math/pow x 2) (Math/pow y 2)) (Math/pow z 2))]
                         [x y z])))))
 
+(def euler10
+  (apply + (take-while #(< % 200000) (primes/lazy-primes))))
+
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
@@ -49,4 +52,8 @@
   (println "Euler 3:" euler3)
   (println "Euler 4:" euler4)
   (println "Euler 5:" euler5)
-  (println "Euler 6:" euler6))
+  (println "Euler 6:" euler6)
+  (println "Euler 7:" euler7)
+  (println "Euler 8:" euler8)
+  (println "Euler 9:" euler9)
+  (println "Euler 10:" euler10))
