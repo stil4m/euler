@@ -1,6 +1,7 @@
 (ns euler.core
   (:require
     [euler.util :as util]
+    [euler.input :as input]
     [euler.primes :as primes])
   (:gen-class))
 
@@ -26,6 +27,15 @@
 
 (def euler7
   (last (take 10001 (primes/lazy-primes))))
+
+(defn parts-of
+  [n seq]
+  (if (< (count seq) n)
+    []
+    (cons (take n seq) (parts-of n (drop 1 seq)))))
+
+(def euler8
+  (apply max (map #(apply * %) (parts-of 13 input/input8))))
 
 (defn -main
   "I don't do a whole lot ... yet."
