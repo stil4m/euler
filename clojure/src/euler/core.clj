@@ -42,7 +42,29 @@
                         [x y z])))))
 
 (def euler10
-  (apply + (take-while #(< % 200000) (primes/lazy-primes))))
+  (apply + (take-while #(< % 2000000) (primes/lazy-primes))))
+
+(defn coords-to-vals
+  [cords seq]
+  (map #(map (fn [c]
+               (nth seq
+                    (+ (first c) (* 20 (second c)))))
+             %)
+       cords))
+
+(def euler11
+  (let [horizontal (for [x (range 0 20)] (take 20 (drop (* x 20) input/input11)))
+        vertical (for [x (range 0 20) :let [y (range 0 20)]] (map #(nth input/input11 (+ x (* % 20))) y))
+        diagonal-up (for [x (range 0 39)
+                          :let [y (range 0 20)]]
+                      (filter #(and (< (first %) 20) (> (first %) -1)) (map #(do [(- x %) %]) y)))
+        diagonal-down (map #(map (fn [e] [(- 19 (first e)) (second e)]) %) diagonal-up)
+        parts (apply concat (map #(util/parts-of 4 %) (concat horizontal
+                                                              vertical
+                                                              (coords-to-vals diagonal-down input/input11)
+                                                              (coords-to-vals diagonal-up  input/input11))))]
+    (apply max (map #(apply * %) parts))))
+
 
 (defn -main
   "I don't do a whole lot ... yet."
@@ -56,4 +78,5 @@
   (println "Euler 7:" euler7)
   (println "Euler 8:" euler8)
   (println "Euler 9:" euler9)
-  (println "Euler 10:" euler10))
+  (println "Euler 10:" euler10)
+  (println "Euler 11:" euler11))
