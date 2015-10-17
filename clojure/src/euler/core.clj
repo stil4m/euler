@@ -81,6 +81,8 @@
         t
         (recur (inc n))))))
 
+(defn euler13 []
+  (Long/valueOf (subs (str (apply + input/input13)) 0 10)))
 
 (defn -main
   "I don't do a whole lot ... yet."
@@ -95,4 +97,6 @@
   (println "Euler 8:" (euler8))
   (println "Euler 9:" (euler9))
   (println "Euler 10:" (euler10))
-  (println "Euler 11:" (euler11)))
+  (println "Euler 11:" (euler11))
+  (println "Euler 12:" (euler12))
+  (println "Euler 13:" (euler13)))

@@ -38,3 +38,6 @@
 (deftest test-euler12
   (testing "Euler 12." (is (= (euler12) 76576500))))
 
+(deftest test-euler13
+  (testing "Euler 13." (is (= (euler13) 5537376230))))
+
