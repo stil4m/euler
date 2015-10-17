@@ -49,6 +49,12 @@
   [n min max]
   (filter (divides-prop n) (range min (inc max))))
 
+(defn divisors
+  [n]
+  (let [max (lower-sqrt n)
+        divs (divisors-in-range n 2 max)
+        divs' (map #(/ n %) divs)]
+    (set (concat divs divs' [1 n]))))
 (defn is-palindrome?
   [n]
   (let [str-n (str n)]
@@ -65,3 +71,9 @@
   (if (< (count seq) n)
     []
     (cons (take n seq) (parts-of n (drop 1 seq)))))
+
+
+;; Shapes
+(defn triangular
+  [n]
+  (int (* (/ n 2) (inc n))))
