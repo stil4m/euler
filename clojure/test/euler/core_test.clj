@@ -20,3 +20,6 @@
 (deftest test-euler6
   (testing "Euler 6." (is (= euler6 25164150))))
 
+(deftest test-eule7
+  (testing "Euler 7." (is (= euler7 104743))))
+

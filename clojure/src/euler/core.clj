@@ -1,6 +1,7 @@
 (ns euler.core
   (:require
-    [euler.util :as util])
+    [euler.util :as util]
+    [euler.primes :as primes])
   (:gen-class))
 
 (def euler1 (apply + (filter #(or (util/divides % 5) (util/divides % 3)) (range 1 1000))))
@@ -22,6 +23,9 @@
   (let [r (range 1 (inc 100))]
     (- (int (Math/pow (apply + r) 2))
        (apply + (map #(int (Math/pow % 2)) r)))))
+
+(def euler7
+  (last (take 10001 (primes/lazy-primes))))
 
 (defn -main
   "I don't do a whole lot ... yet."

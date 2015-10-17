@@ -1,4 +1,6 @@
-(ns euler.util)
+(ns euler.util
+  (:require
+    [euler.primes :as primes]))
 
 (defn divides
   [n m]
