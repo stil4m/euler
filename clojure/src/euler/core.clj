@@ -7,10 +7,11 @@
 
 (def euler2 (apply + (filter even? (take-while #(< % 4000000) util/fib-seq))))
 
+(def euler3 (last (util/factors 600851475143)))
 
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
-  (euler1)
-  (println (str (first args)))
-  (println "Hello, World!"))
+  (println "Euler 1:" euler1)
+  (println "Euler 2:" euler2)
+  (println "Euler 3:" euler3))
