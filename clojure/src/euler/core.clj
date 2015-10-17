@@ -18,6 +18,11 @@
         prime-products (map #(int (Math/pow (first %) (last %))) fac-map)]
     (apply * prime-products)))
 
+(def euler6
+  (let [r (range 1 (inc 100))]
+    (- (int (Math/pow (apply + r) 2))
+       (apply + (map #(int (Math/pow % 2)) r)))))
+
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
@@ -25,4 +30,5 @@
   (println "Euler 2:" euler2)
   (println "Euler 3:" euler3)
   (println "Euler 4:" euler4)
-  (println "Euler 5:" euler5))
+  (println "Euler 5:" euler5)
+  (println "Euler 6:" euler6))
