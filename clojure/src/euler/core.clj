@@ -70,10 +70,10 @@
         parts (apply concat (map #(util/parts-of 4 %) (concat horizontal
                                                               vertical
                                                               (coords-to-vals diagonal-down input/input11)
-                                                              (coords-to-vals diagonal-up  input/input11))))]
+                                                              (coords-to-vals diagonal-up input/input11))))]
     (apply max (map #(apply * %) parts))))
 
-(defn euler12  []
+(defn euler12 []
   (loop [n 1]
     (let [t (util/triangular n)
           d (util/divisors t)]
@@ -83,6 +83,27 @@
 
 (defn euler13 []
   (Long/valueOf (subs (str (apply + input/input13)) 0 10)))
+
+(defn colatz-path
+  [n m]
+  (let [v (get m n)]
+    (if v
+      [v m]
+      (let [next (if (odd? n)
+                   (inc (* 3 n))
+                   (/ n 2))
+            next-v-m (colatz-path next m)
+            v (inc (first next-v-m))]
+        [v (assoc (second next-v-m) n v)]))))
+
+(defn euler14 []
+  (let [data (loop [n 2 m {1 1}]
+               (if (= n 1000000)
+                 m
+                 (let [next-m (second (colatz-path n m))]
+                   (recur (inc n) next-m))))
+        clean-data (filter (fn [k] (< (key k) 1000000)) data)]
+    (key (reduce (fn [a b] (if (< (val b) (val a)) a b)) clean-data))))
 
 (defn -main
   "I don't do a whole lot ... yet."
@@ -99,4 +120,5 @@
   (println "Euler 10:" (euler10))
   (println "Euler 11:" (euler11))
   (println "Euler 12:" (euler12))
-  (println "Euler 13:" (euler13)))
+  (println "Euler 13:" (euler13))
+  (println "Euler 14:" (euler14)))
