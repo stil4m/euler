@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lodash": "^3.10.1"
+    "express": "^4.13.4",
+    "lodash": "^3.10.1",
+    "nodemon": "^1.8.1"
   }
 }
