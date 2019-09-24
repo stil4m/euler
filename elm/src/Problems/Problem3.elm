@@ -12,6 +12,9 @@ main =
     --     , text <| Debug.toString 600851475143
     --     ]
     Factors.factors 600851475143
+        |> List.map (\( a, _ ) -> a)
+        |> List.maximum
+        |> Maybe.withDefault 0
         -- Primes.primes
         -- |> Primes.takeWhile (\v -> v < 10000)
         -- |> List.sum
