@@ -1,11 +1,56 @@
-module Elements.Factors exposing (factors)
+module Elements.Factors exposing (factors, flatten, sum)
 
 import Elements.Natural exposing (..)
 import Elements.Primes as Primes
 
 
 type alias FactorList =
-    List ( Int, Int )
+    List FactorElem
+
+
+type alias FactorElem =
+    ( Int, Int )
+
+
+addFactorElem : FactorElem -> FactorList -> FactorList
+addFactorElem (( ax, acount ) as a) b =
+    case b of
+        [] ->
+            [ a ]
+
+        (( zx, zcount ) as z) :: xs ->
+            if ax == zx then
+                ( zx, max zcount acount ) :: xs
+
+            else
+                z :: addFactorElem a xs
+
+
+sum : FactorList -> Int
+sum x =
+    case x of
+        ( a, b ) :: rest ->
+            a ^ b * sum rest
+
+        [] ->
+            1
+
+
+flatten : List FactorList -> FactorList
+flatten x =
+    let
+        xs =
+            List.concat x
+
+        flattenRec ys zs =
+            case zs of
+                z :: rest ->
+                    flattenRec (addFactorElem z ys) rest
+
+                [] ->
+                    ys
+    in
+    flattenRec [] xs
 
 
 factors : Int -> FactorList
