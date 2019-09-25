@@ -26,16 +26,6 @@ subGroupsOf n xs =
         List.take n xs :: subGroupsOf n (List.drop 1 xs)
 
 
-flip : List (List a) -> List (List a)
-flip n =
-    if List.all List.isEmpty n then
-        []
-
-    else
-        List.concat (List.map (List.take 1) n)
-            :: List.map (List.drop 1) n
-
-
 input : List Int
 input =
     [ "73167176531330624919225119674426574742355349194934"
