@@ -5,4 +5,6 @@ import Html exposing (..)
 
 main : Html msg
 main =
-    text "TODO"
+    "TODO"
+        |> Debug.toString
+        |> text
